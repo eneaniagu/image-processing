@@ -1,21 +1,31 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from 'axios';
 import LoadingModal from "./Loading";
 
 const Content = () => {
     const [result, setResult] = useState([]);
     const [xfile, setfile] = useState();
+    const [captionld, setcaptionld] = useState(true)
     const [ imgUrl, setimgUrl]  = useState()
     const [files, setFiles] = useState(null);
     const [loading, setLoading] = useState(false)
     const [uploadedUrl, setUploadedUrl] = useState('')
     const [theCaption, settheCaption] = useState('')
 
+  console.log("mini", captionld)
+    useEffect(() => {
+      const delay = 1000;
+      const timer = setTimeout(() => {
+        setcaptionld(false);
+      }, delay)
+      return () => clearTimeout(timer);
+    }, [])
+
     const handleChange = (event) => {
         const selectedFile = event.target.files[0];
         setFiles(event.target.files[0])
-    
+
         if (selectedFile) {
           const reader = new FileReader();
     
@@ -34,6 +44,7 @@ const Content = () => {
         setfile(null)
         setResult([])
         settheCaption('')
+        setcaptionld(false)
       }
 
 
@@ -123,7 +134,7 @@ const Content = () => {
 
 
      const  handleCaption = () => {
-    
+
 const IMAGE_URL = `https://moxieus.tech/pimus/public/imagepro/${uploadedUrl}`;
 
 const raw = JSON.stringify({
@@ -154,8 +165,8 @@ const requestOptions = {
 fetch(`https://api.clarifai.com/v2/models/general-english-image-caption-blip/versions/cdb690f13e62470ea6723642044f95e4/outputs`, requestOptions)
     .then(response => response.json())
     .then(result => {
-      
        settheCaption(result.outputs[0].data.text.raw)
+       console.log(result)
     })
     .catch(error => console.log('error', error));
   
@@ -172,40 +183,46 @@ fetch(`https://api.clarifai.com/v2/models/general-english-image-caption-blip/ver
           
 
 <div className="flex space-x-10  mb-10">
-<div className="border-2 rounded-md bg-white w-[8em] h-[2.5em] mb-4 ml-10">
+<div className="border-2 rounded-md bg-white w-[8em] h-[2.5em] mb-4 ml-10 hover:bg-blue-500 hover:text-white active:bg-blue-500">
     <label  for="file" className="p-2">UPload Media</label>
     <input type="file" id="file" onChange={handleChange} className="" hidden name="images" multiple />
 </div>
 
-<button onClick={handleclarifai} className="bg-white w-[8em] h-[2.5em] border-2 rounded-md">Identify</button>
+<button onClick={handleclarifai} className="hover:bg-blue-500 hover:text-white active:bg-blue-500 bg-white w-[8em] h-[2.5em] border-2 rounded-md">Identify</button>
 
-<button onClick={handleCaption} className="bg-white w-[8em] h-[2.5em] border-2 rounded-md">Get Caption</button>
+<button onClick={handleCaption} className="bg-white hover:bg-blue-500 hover:text-white active:bg-blue-500 w-[8em] h-[2.5em] border-2 rounded-md">Get Caption</button>
 
-<button onClick={ClearHandler} className="bg-white w-[8em] h-[2.5em] border-2 rounded-md">Reset</button>
+<button onClick={ClearHandler} className="bg-white w-[8em] hover:bg-blue-500 hover:text-white active:bg-blue-500 h-[2.5em] border-2 rounded-md">Reset</button>
 </div>
   <div className="flex space-x-4">
     <div>
-    <div className="mt-4 font-bold text-white mb-2">
-    { theCaption && <h2>The Caption: {theCaption}</h2>}
-</div>
-<div className="w-[50em] h-auto bg-white overflow-hidden border-2">
-     
-   {xfile && <img src={xfile} alt="Uploaded" />}
-     
-</div>
-</div>
-<div className="bg-white border-2  h-[30em] overflow-auto w-[15em]">
-<ul>
-      <div className="mt-40 ml-10 absolute"> 
-      
-     { loading &&  <LoadingModal/>}
+    
+       {captionld ? (
+        <p className="text-white mb-2 italic font-bold">Loading...</p>
+      ) : (
+        <>
+        <div className="mt-4 font-bold text-white mb-2">
+     <h2>The Caption: {theCaption}</h2>
       </div>
+      </>
+      )}
+      
+<div className="h-[30em] ml-[-30px] bg-white overflow-auto border-2 div">
+     
+   {xfile && <img src={xfile} alt="Uploaded"  className="h-[100%]  w-[100%]"/>}
+     
+</div>
+</div>
+
+      <div className="mt-40 right-[63em] absolute"> 
+        { loading &&  <LoadingModal/>}
+      </div>
+      <div className="bg-white border-2 absolute right-[35em]  overflow-auto">
+<ul className="p-2">
         {result.map((item, index) => (
           <li className="p-2" key={index}>{item}</li>
         ))}
-      </ul>
-
-      
+      </ul>  
 </div>
 </div>
 

@@ -34,7 +34,8 @@ Copy code
 }
 
 .loading-text {
-  color: black;
+  color: blue;
+  font-weight: bold;
   margin-top: 10px;
 }
 
@@ -45,4 +46,8 @@ Copy code
   100% {
     transform: rotate(360deg);
   }
+}
+
+.div-be {
+  object-fit: cover;
 }
