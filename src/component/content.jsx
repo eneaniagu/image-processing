@@ -210,7 +210,7 @@ fetch(`https://api.clarifai.com/v2/models/general-english-image-caption-blip/ver
           <>
           {
            
-            <div className="absolute top-[53%] border-2 w-[30%] mb-4 bg-white">
+            <div className="absolute top-[66%] border-2 w-[30%] mb-4 bg-white">
           <div className="mt-4 font-bold text-yellow-600 mb-2 ">
        <h2>The Caption: {theCaption}</h2>
         </div>
@@ -228,7 +228,7 @@ fetch(`https://api.clarifai.com/v2/models/general-english-image-caption-blip/ver
   <p className="text-xl text-center"> Image processing </p> 
   <p className=" text-center text-yellow-600">[upload image, generate image content and the caption for the image]</p>
   </div>
-<div className="h-[30em] ml-[-30px] bg-white overflow-auto border-2 div rounded-md ">
+<div className="h-[30em] w-[45em] ml-[-30px] bg-white overflow-auto border-2 div rounded-md ">
 <div className="absolute z-50 top-40 text-yellow-500 font-bold ">
     <label  for="file" className="p-2">Click to upload image</label>
     <input type="file" id="file" onChange={handleChange} className="" hidden name="images" multiple />
@@ -249,7 +249,7 @@ fetch(`https://api.clarifai.com/v2/models/general-english-image-caption-blip/ver
     captionld ?
     <span>Generate caption</span>
     :
-    <span>loading ...</span>
+    <span className="">loading ...</span>
   }</button>
   <div>
 <button onClick={ClearHandler} className="hover:bg-yellow-500 mt-4 hover:text-white active:bg-yellow-500 bg-yellow-600 w-[40em] h-[2.5em] border-2 rounded-md font-bold">Reset</button>
@@ -270,7 +270,7 @@ fetch(`https://api.clarifai.com/v2/models/general-english-image-caption-blip/ver
        </>
        :
        <>
-       <div className="bg-white border-2 absolute right-[33em]  mt-[28px] overflow-auto">
+       <div className="bg-white border-2 absolute right-[33em]  mt-[98px] overflow-auto">
        <ul className="p-2">
                {result.map((item, index) => (
                  <>
