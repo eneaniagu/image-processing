@@ -14,13 +14,13 @@ const Content = () => {
     const [theCaption, settheCaption] = useState('')
 
   console.log("mini", captionld)
-    useEffect(() => {
-      const delay = 1000;
-      const timer = setTimeout(() => {
-        setcaptionld(false);
-      }, delay)
-      return () => clearTimeout(timer);
-    }, [])
+    // useEffect(() => {
+    //   const delay = 1000;
+    //   const timer = setTimeout(() => {
+    //     setcaptionld(false);
+    //   }, delay)
+    //   return () => clearTimeout(timer);
+    // }, [])
 
     const handleChange = (event) => {
         const selectedFile = event.target.files[0];
@@ -135,6 +135,11 @@ const Content = () => {
 
      const  handleCaption = () => {
 
+      setcaptionld(false);
+        setTimeout(() => {
+          setcaptionld(true);
+        }, 3000);
+
 const IMAGE_URL = `https://moxieus.tech/pimus/public/imagepro/${uploadedUrl}`;
 
 const raw = JSON.stringify({
@@ -166,7 +171,7 @@ fetch(`https://api.clarifai.com/v2/models/general-english-image-caption-blip/ver
     .then(response => response.json())
     .then(result => {
        settheCaption(result.outputs[0].data.text.raw)
-       console.log(result)
+       
     })
     .catch(error => console.log('error', error));
   
@@ -176,54 +181,109 @@ fetch(`https://api.clarifai.com/v2/models/general-english-image-caption-blip/ver
 
 
     return (
-        <div >
+        <div>
          
-                  <h2 className="text-white text-2xl font-bold text-center mt-20 ">IMAGE PROCESSING</h2>
-            <div className="mt-10 ml-[30em]">
+                  {/* x */}
+            <div className="mt-8 ml-[30em]">
           
 
 <div className="flex space-x-10  mb-10">
-<div className="border-2 rounded-md bg-white w-[8em] h-[2.5em] mb-4 ml-10 hover:bg-blue-500 hover:text-white active:bg-blue-500">
-    <label  for="file" className="p-2">UPload Media</label>
-    <input type="file" id="file" onChange={handleChange} className="" hidden name="images" multiple />
-</div>
 
-<button onClick={handleclarifai} className="hover:bg-blue-500 hover:text-white active:bg-blue-500 bg-white w-[8em] h-[2.5em] border-2 rounded-md">Identify</button>
 
-<button onClick={handleCaption} className="bg-white hover:bg-blue-500 hover:text-white active:bg-blue-500 w-[8em] h-[2.5em] border-2 rounded-md">Get Caption</button>
 
-<button onClick={ClearHandler} className="bg-white w-[8em] hover:bg-blue-500 hover:text-white active:bg-blue-500 h-[2.5em] border-2 rounded-md">Reset</button>
+
+
+
+
+
 </div>
   <div className="flex space-x-4">
     <div>
-    
-       {captionld ? (
-        <p className="text-white mb-2 italic font-bold">Loading...</p>
-      ) : (
-        <>
-        <div className="mt-4 font-bold text-white mb-2">
-     <h2>The Caption: {theCaption}</h2>
-      </div>
-      </>
-      )}
-      
-<div className="h-[30em] ml-[-30px] bg-white overflow-auto border-2 div">
      
+       {
+         captionld ?
+         theCaption.length === 0 ? (
+          <>
+         
+          </>
+        ) : (
+          <>
+          {
+           
+            <div className="absolute top-[53%] border-2 w-[30%] mb-4 bg-white">
+          <div className="mt-4 font-bold text-yellow-600 mb-2 ">
+       <h2>The Caption: {theCaption}</h2>
+        </div>
+        </div>
+          }
+        </>
+       
+        )
+         :
+         <>
+         </>
+       }
+     
+  <div className=" mb-10" >
+  <p className="text-xl text-center"> Image processing </p> 
+  <p className=" text-center text-yellow-600">[upload image, generate image content and the caption for the image]</p>
+  </div>
+<div className="h-[30em] ml-[-30px] bg-white overflow-auto border-2 div rounded-md ">
+<div className="absolute z-50 top-40 text-yellow-500 font-bold ">
+    <label  for="file" className="p-2">Click to upload image</label>
+    <input type="file" id="file" onChange={handleChange} className="" hidden name="images" multiple />
+</div>
    {xfile && <img src={xfile} alt="Uploaded"  className="h-[100%]  w-[100%]"/>}
      
 </div>
-</div>
+{
+  result.length === 0 ?
+  <>
+  <button onClick={handleclarifai} className="hover:bg-yellow-500 hover:text-white active:bg-yellow-500 bg-yellow-600 w-[40em] h-[2.5em] border-2 rounded-md"><span className="p-2 font-bold text-white">Identify</span></button>
 
-      <div className="mt-40 right-[63em] absolute"> 
+  </>
+  :
+  <>
+  
+  <button onClick={handleCaption} className="hover:bg-yellow-500 hover:text-white active:bg-yellow-500 bg-yellow-600 w-[40em] h-[2.5em] border-2 rounded-md font-bold">{
+    captionld ?
+    <span>Generate caption</span>
+    :
+    <span>loading ...</span>
+  }</button>
+  <div>
+<button onClick={ClearHandler} className="hover:bg-yellow-500 mt-4 hover:text-white active:bg-yellow-500 bg-yellow-600 w-[40em] h-[2.5em] border-2 rounded-md font-bold">Reset</button>
+  </div>
+  </>
+}
+
+</div>
+      {/* loading modular */}
+      <div className="mt-40 right-[63em] absolute "> 
         { loading &&  <LoadingModal/>}
       </div>
-      <div className="bg-white border-2 absolute right-[35em]  overflow-auto">
-<ul className="p-2">
-        {result.map((item, index) => (
-          <li className="p-2" key={index}>{item}</li>
-        ))}
-      </ul>  
-</div>
+
+ {/* //  idenntify property */}
+     {
+       result.length === 0 ?
+       <>
+       </>
+       :
+       <>
+       <div className="bg-white border-2 absolute right-[33em]  mt-[28px] overflow-auto">
+       <ul className="p-2">
+               {result.map((item, index) => (
+                 <>
+                 <div className="flex mt-4">
+                 <div className="bg-yellow-600 h-4 w-4 rounded-lg"></div> <li className="p-2 mt-[-11px] " key={index}>{item}</li>
+                 </div>
+                 </>
+               ))}
+             </ul>  
+       </div>
+       </>
+     }
+
 </div>
 
             </div>

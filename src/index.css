@@ -4,13 +4,13 @@
 
 
 .body {
-  @apply bg-green-600;
-  background-image: url(../src/assets/img/bcg.jpg);
+  @apply bg-gray-100;
+ 
   
 }
 
 
-Copy code
+
 .loading-modal {
   position: fixed;
   top: 0;
