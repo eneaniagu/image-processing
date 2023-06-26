@@ -239,13 +239,13 @@ fetch(`https://api.clarifai.com/v2/models/general-english-image-caption-blip/ver
 {
   result.length === 0 ?
   <>
-  <button onClick={handleclarifai} className="hover:bg-yellow-500 hover:text-white active:bg-yellow-500 bg-yellow-600 w-[40em] h-[2.5em] border-2 rounded-md"><span className="p-2 font-bold text-white">Identify</span></button>
+  <button onClick={handleclarifai} className="hover:bg-yellow-500 mt-4 hover:text-white active:bg-yellow-500 bg-yellow-600 w-[40em] h-[2.5em] border-2 rounded-md"><span className="p-2 font-bold text-white">Identify</span></button>
 
   </>
   :
   <>
   
-  <button onClick={handleCaption} className="hover:bg-yellow-500 hover:text-white active:bg-yellow-500 bg-yellow-600 w-[40em] h-[2.5em] border-2 rounded-md font-bold">{
+  <button onClick={handleCaption} className="hover:bg-yellow-500  mt-4 hover:text-white active:bg-yellow-500 bg-yellow-600 w-[40em] h-[2.5em] border-2 rounded-md font-bold">{
     captionld ?
     <span>Generate caption</span>
     :
