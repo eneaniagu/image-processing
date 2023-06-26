@@ -1,21 +1,31 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from 'axios';
 import LoadingModal from "./Loading";
 
 const Content = () => {
     const [result, setResult] = useState([]);
     const [xfile, setfile] = useState();
+    const [captionld, setcaptionld] = useState(true)
     const [ imgUrl, setimgUrl]  = useState()
     const [files, setFiles] = useState(null);
     const [loading, setLoading] = useState(false)
     const [uploadedUrl, setUploadedUrl] = useState('')
     const [theCaption, settheCaption] = useState('')
 
+  console.log("mini", captionld)
+    // useEffect(() => {
+    //   const delay = 1000;
+    //   const timer = setTimeout(() => {
+    //     setcaptionld(false);
+    //   }, delay)
+    //   return () => clearTimeout(timer);
+    // }, [])
+
     const handleChange = (event) => {
         const selectedFile = event.target.files[0];
         setFiles(event.target.files[0])
-    
+
         if (selectedFile) {
           const reader = new FileReader();
     
@@ -34,6 +44,7 @@ const Content = () => {
         setfile(null)
         setResult([])
         settheCaption('')
+        setcaptionld(false)
       }
 
 
@@ -123,7 +134,12 @@ const Content = () => {
 
 
      const  handleCaption = () => {
-    
+
+      setcaptionld(false);
+        setTimeout(() => {
+          setcaptionld(true);
+        }, 3000);
+
 const IMAGE_URL = `https://moxieus.tech/pimus/public/imagepro/${uploadedUrl}`;
 
 const raw = JSON.stringify({
@@ -154,8 +170,8 @@ const requestOptions = {
 fetch(`https://api.clarifai.com/v2/models/general-english-image-caption-blip/versions/cdb690f13e62470ea6723642044f95e4/outputs`, requestOptions)
     .then(response => response.json())
     .then(result => {
-      
        settheCaption(result.outputs[0].data.text.raw)
+       
     })
     .catch(error => console.log('error', error));
   
@@ -165,48 +181,109 @@ fetch(`https://api.clarifai.com/v2/models/general-english-image-caption-blip/ver
 
 
     return (
-        <div >
+        <div>
          
-                  <h2 className="text-white text-2xl font-bold text-center mt-20 ">IMAGE PROCESSING</h2>
-            <div className="mt-10 ml-[30em]">
+                  {/* x */}
+            <div className="mt-8 ml-[30em]">
           
 
 <div className="flex space-x-10  mb-10">
-<div className="border-2 rounded-md bg-white w-[8em] h-[2.5em] mb-4 ml-10">
-    <label  for="file" className="p-2">UPload Media</label>
-    <input type="file" id="file" onChange={handleChange} className="" hidden name="images" multiple />
-</div>
 
-<button onClick={handleclarifai} className="bg-white w-[8em] h-[2.5em] border-2 rounded-md">Identify</button>
 
-<button onClick={handleCaption} className="bg-white w-[8em] h-[2.5em] border-2 rounded-md">Get Caption</button>
 
-<button onClick={ClearHandler} className="bg-white w-[8em] h-[2.5em] border-2 rounded-md">Reset</button>
+
+
+
+
+
 </div>
   <div className="flex space-x-4">
     <div>
-    <div className="mt-4 font-bold text-white mb-2">
-    { theCaption && <h2>The Caption: {theCaption}</h2>}
-</div>
-<div className="w-[50em] h-auto bg-white overflow-hidden border-2">
      
-   {xfile && <img src={xfile} alt="Uploaded" />}
+       {
+         captionld ?
+         theCaption.length === 0 ? (
+          <>
+         
+          </>
+        ) : (
+          <>
+          {
+           
+            <div className="absolute top-[53%] border-2 w-[30%] mb-4 bg-white">
+          <div className="mt-4 font-bold text-yellow-600 mb-2 ">
+       <h2>The Caption: {theCaption}</h2>
+        </div>
+        </div>
+          }
+        </>
+       
+        )
+         :
+         <>
+         </>
+       }
+     
+  <div className=" mb-10" >
+  <p className="text-xl text-center"> Image processing </p> 
+  <p className=" text-center text-yellow-600">[upload image, generate image content and the caption for the image]</p>
+  </div>
+<div className="h-[30em] ml-[-30px] bg-white overflow-auto border-2 div rounded-md ">
+<div className="absolute z-50 top-40 text-yellow-500 font-bold ">
+    <label  for="file" className="p-2">Click to upload image</label>
+    <input type="file" id="file" onChange={handleChange} className="" hidden name="images" multiple />
+</div>
+   {xfile && <img src={xfile} alt="Uploaded"  className="h-[100%]  w-[100%]"/>}
      
 </div>
-</div>
-<div className="bg-white border-2  h-[30em] overflow-auto w-[15em]">
-<ul>
-      <div className="mt-40 ml-10 absolute"> 
-      
-     { loading &&  <LoadingModal/>}
-      </div>
-        {result.map((item, index) => (
-          <li className="p-2" key={index}>{item}</li>
-        ))}
-      </ul>
+{
+  result.length === 0 ?
+  <>
+  <button onClick={handleclarifai} className="hover:bg-yellow-500 mt-4 hover:text-white active:bg-yellow-500 bg-yellow-600 w-[40em] h-[2.5em] border-2 rounded-md"><span className="p-2 font-bold text-white">Identify</span></button>
 
-      
+  </>
+  :
+  <>
+  
+  <button onClick={handleCaption} className="hover:bg-yellow-500  mt-4 hover:text-white active:bg-yellow-500 bg-yellow-600 w-[40em] h-[2.5em] border-2 rounded-md font-bold">{
+    captionld ?
+    <span>Generate caption</span>
+    :
+    <span>loading ...</span>
+  }</button>
+  <div>
+<button onClick={ClearHandler} className="hover:bg-yellow-500 mt-4 hover:text-white active:bg-yellow-500 bg-yellow-600 w-[40em] h-[2.5em] border-2 rounded-md font-bold">Reset</button>
+  </div>
+  </>
+}
+
 </div>
+      {/* loading modular */}
+      <div className="mt-40 right-[63em] absolute "> 
+        { loading &&  <LoadingModal/>}
+      </div>
+
+ {/* //  idenntify property */}
+     {
+       result.length === 0 ?
+       <>
+       </>
+       :
+       <>
+       <div className="bg-white border-2 absolute right-[33em]  mt-[28px] overflow-auto">
+       <ul className="p-2">
+               {result.map((item, index) => (
+                 <>
+                 <div className="flex mt-4">
+                 <div className="bg-yellow-600 h-4 w-4 rounded-lg"></div> <li className="p-2 mt-[-11px] " key={index}>{item}</li>
+                 </div>
+                 </>
+               ))}
+             </ul>  
+       </div>
+       </>
+     }
+
 </div>
 
             </div>
