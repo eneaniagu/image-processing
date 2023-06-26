@@ -34,7 +34,7 @@
 }
 
 .loading-text {
-  color: blue;
+  @apply text-yellow-600;
   font-weight: bold;
   margin-top: 10px;
 }
