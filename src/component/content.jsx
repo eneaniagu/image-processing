@@ -201,10 +201,10 @@ fetch(`https://api.clarifai.com/v2/models/general-english-image-caption-blip/ver
     <div>
      
        {
-         captionld ?
+         
          theCaption.length === 0 ? (
           <>
-         
+          
           </>
         ) : (
           <>
@@ -219,9 +219,7 @@ fetch(`https://api.clarifai.com/v2/models/general-english-image-caption-blip/ver
         </>
        
         )
-         :
-         <>
-         </>
+        
        }
      
   <div className=" mb-10" >
