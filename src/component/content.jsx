@@ -170,6 +170,7 @@ const requestOptions = {
 fetch(`https://api.clarifai.com/v2/models/general-english-image-caption-blip/versions/cdb690f13e62470ea6723642044f95e4/outputs`, requestOptions)
     .then(response => response.json())
     .then(result => {
+      console.log(result)
        settheCaption(result.outputs[0].data.text.raw)
        
     })
@@ -268,7 +269,7 @@ fetch(`https://api.clarifai.com/v2/models/general-english-image-caption-blip/ver
        </>
        :
        <>
-       <div className="bg-white border-2 absolute right-[33em]  mt-[98px] overflow-auto">
+       <div className="bg-white border-2 absolute right-[33em] h-[26em]  mt-[98px] overflow-auto">
        <ul className="p-2">
                {result.map((item, index) => (
                  <>
